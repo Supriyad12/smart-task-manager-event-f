@@ -1,17 +1,16 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const authController = require("../controllers/authController");
-const authMiddleware = require("../middleware/authMiddleware");
- 
- 
-// POST http://localhost:3000/api/auth/register
-router.post("/register", authController.register);
- 
-// POST http://localhost:3000/api/auth/login
-router.post("/login", authController.login);
- 
-// POST http://localhost:3000/api/auth/profile
-router.get("/profile", authMiddleware, authController.getUser);
- 
+
+// POST /auth/register
+router.post('/register', async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    // Registration logic here
+    res.status(200).json({ message: 'User registered' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;
- 
