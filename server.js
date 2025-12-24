@@ -1,36 +1,19 @@
-const express = require("express");
-const cors = require("cors");
-const connectDB = require("./utils/db");
-const authRoutes = require("./routes/authRoutes");
-const taskRoutes = require("./routes/taskRoutes");
+const express = require('express');
+const cors = require('cors');
 
 const app = express();
 
-// Allow requests only from your frontend Vercel URL
-const allowedOrigins = [
-  "https://frontendtask-fcys4ucrq-supriyad12s-projects.vercel.app"
-];
-
+// Allow all origins (or restrict to your frontend)
 app.use(cors({
-  origin: function(origin, callback) {
-    // allow requests with no origin (like mobile apps or Postman)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
+  origin: 'https://smart-task-manager-event-vark.vercel.app', // frontend URL
+  methods: ['GET','POST','PUT','DELETE'],
   credentials: true
 }));
 
 app.use(express.json());
 
-connectDB();
+// Your routes here
+app.use('/auth', require('./routes/auth'));
 
-app.use("/api/auth", authRoutes);
-app.use("/api/tasks", taskRoutes);
-
-app.get("/", (req, res) => res.send("API running"));
-
+// Start server (for serverless, export app)
 module.exports = app;
